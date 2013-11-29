@@ -11,6 +11,7 @@ Add this line to your application's Gemfile:
 ## Usage
 
     # config/deploy.rb
+    ...
     require 'mina/puma'
 
     # Add pids and sockets to shared paths
@@ -18,6 +19,7 @@ Add this line to your application's Gemfile:
 
     ...
     task :setup do
+      ...
       queue! %[mkdir -p "{deploy_to}/shared/tmp/pids/"]
       queue! %[mkdir -p "{deploy_to}/shared/tmp/sockets/"]
     end

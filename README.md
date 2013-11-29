@@ -21,6 +21,9 @@ Or install it yourself as:
     # config/deploy.rb
     require 'mina/puma'
 
+    # Add pids and sockets to shared paths
+    set :shared_paths, %w(log tmp/pids tmp/sockets config/database.yml)
+
     ...
     task :setup do
       queue! %[mkdir -p "{deploy_to}/shared/tmp/pids/"]

@@ -6,15 +6,7 @@ Puma tasks for Mina deployment.
 
 Add this line to your application's Gemfile:
 
-    gem 'mina-puma'
-
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install mina-puma
+    gem 'mina-puma', require: 'false'
 
 ## Usage
 

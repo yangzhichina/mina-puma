@@ -40,6 +40,12 @@ Add this line to your application's Gemfile:
       end
     end
 
+Available commans:
+
+    mina puma:start
+    mina puma:stop
+    mina puma:restart
+
 Default settings:
 
     set :puma_pid,    "#{deploy_to}/#{shared_path}/tmp/pids/puma.pid"

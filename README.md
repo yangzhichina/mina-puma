@@ -1,6 +1,6 @@
 # Mina::Puma
 
-TODO: Write a gem description
+Puma tasks for Mina deployment.
 
 ## Installation
 
@@ -45,8 +45,8 @@ Or install it yourself as:
 
 Default settings:
 
-  set :puma_pid,    "#{deploy_to}/#{shared_path}/tmp/pids/puma.pid"
-  set :puma_socket, "#{deploy_to}/#{shared_path}/tmp/sockets/puma.sock"
+    set :puma_pid,    "#{deploy_to}/#{shared_path}/tmp/pids/puma.pid"
+    set :puma_socket, "#{deploy_to}/#{shared_path}/tmp/sockets/puma.sock"
 
 ## Contributing
 

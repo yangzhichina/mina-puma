@@ -22,6 +22,8 @@
 #       end
 #     end
 
+require 'mina/bundler'
+
 set_default :puma_pid,    lambda { "#{deploy_to}/#{shared_path}/tmp/pids/puma.pid" }
 set_default :puma_socket, lambda { "#{deploy_to}/#{shared_path}/tmp/sockets/puma.sock" }
 

@@ -40,7 +40,7 @@ Add this line to your application's Gemfile:
       end
     end
 
-Available commans:
+Available commands:
 
     mina puma:start
     mina puma:stop

@@ -28,7 +28,7 @@ set_default :puma_socket, -> { "#{deploy_to}/#{shared_path}/tmp/sockets/puma.soc
 namespace :puma do
   desc 'Start puma'
   task start: :environment do
-    queue %[cd #{app} && bundle exec puma -q -d -e #{rails_env} -b unix://#{puma_socket} --pidfile #{puma_pid}]
+    queue %[cd #{deploy_to}/#{current_path} && bundle exec puma -q -d -e #{rails_env} -b unix://#{puma_socket} --pidfile #{puma_pid}]
   end
 
   desc 'Stop puma'

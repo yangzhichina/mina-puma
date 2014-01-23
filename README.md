@@ -1,51 +1,83 @@
-# Mina::Puma
+# Mina Puma
 
-Puma tasks for Mina deployment.
+[Mina](https://github.com/nadarei/mina) tasks for handle with
+[Puma](https://github.com/puma/puma).
+
+This gem provides several mina tasks:
+
+    mina puma:restart         # Restart puma
+    mina puma:start           # Start puma
+    mina puma:stop            # Stop puma
 
 ## Installation
 
 Add this line to your application's Gemfile:
 
-    gem 'mina-puma', require: false
+    gem 'mina-puma', :require => false
+
+And then execute:
+
+    $ bundle
+
+Or install it yourself as:
+
+    $ gem install mina-puma
 
 ## Usage
 
-    # config/deploy.rb
-    ...
+Add this to your `config/deploy.rb` file:
+
     require 'mina/puma'
 
-    # Add pids and sockets to shared paths
-    set :shared_paths, %w(log tmp/sockets config/database.yml)
+Make sure the following settings are set in your `config/deploy.rb`:
 
-    ...
-    task :setup do
+* `deploy_to`   - deployment path
+
+Make sure the following directories exists on your server:
+
+* `shared/tmp/sockets` - directory for socket files.
+* `shared/tmp/pids` - direcotry for pid files.
+
+OR you can set other directories by setting follow variables:
+
+* `puma_socket` - puma socket file, default is `shared/tmp/sockets/puma.sock`
+* `puma_pid` - puma pid file, default `shared/tmp/pids/puma.pid`
+* `puma_state` - puma state file, default `shared/tmp/sockets/puma.state`
+* `pumactl_socket` - pumactl socket file, default `shared/tmp/sockets/pumactl.sock`
+
+Then:
+
+```
+$ mina puma:start
+```
+
+## Example
+
+    require 'mina/puma'
+
+    task :setup => :environment do
+      # Puma needs a place to store its pid file and socket file.
+      queue! %(mkdir -p "#{deploy_to}/#{shared_path}/tmp/sockets")
+      queue! %(chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/sockets")
+      queue! %(#{deploy_to}/#{shared_path}/tmp/pids")
+      queue! %(chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/pids")
+
       ...
-      queue! %[mkdir -p "{deploy_to}/shared/tmp/sockets/"]
+
     end
 
     task :deploy do
       deploy do
         invoke :'git:clone'
+        invoke :'deploy:link_shared_paths'
         ...
 
         to :launch do
-         ...
-         invoke :'puma:restart'
+          ...
+          invoke :'puma:restart'
         end
       end
     end
-
-Available commands:
-
-    mina puma:start
-    mina puma:stop
-    mina puma:restart
-
-Default settings:
-
-    set :puma_socket, -> { "#{deploy_to}/#{shared_path}/tmp/sockets/puma.sock" }
-    set :puma_ctl,  -> { "#{deploy_to}/#{shared_path}/tmp/sockets/pumactl.sock" }
-    set :puma_state,  -> { "#{deploy_to}/#{shared_path}/tmp/sockets/puma.state" }
 
 ## Contributing
 

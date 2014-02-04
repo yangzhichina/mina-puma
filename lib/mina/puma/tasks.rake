@@ -32,7 +32,8 @@ namespace :puma do
   task restart: :environment do
     in_directory "#{deploy_to}/#{current_path}" do
       if check_exists?(pumactl_socket)
-        queue! %(#{pumactl_cmd} -S #{puma_state} restart)
+        queue! %(#{pumactl_cmd} -S #{puma_state} stop)
+        queue! %(#{puma_cmd} #{start_options})
       else
         queue! %(#{puma_cmd} #{start_options})
       end

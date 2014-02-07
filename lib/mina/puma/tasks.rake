@@ -51,7 +51,7 @@ namespace :puma do
     end
 
     def check_exists?(file)
-      boolean = capture("if [ -a '#{file}' ]; then echo 'yes'; else echo 'no'; fi").chomp
+      boolean = capture("if [ -f '#{file}' ]; then echo 'yes'; else echo 'no'; fi").chomp
       boolean == 'yes' ? true : false
     end
 end

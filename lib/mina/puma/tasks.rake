@@ -16,36 +16,33 @@ namespace :puma do
 
   desc 'Start puma'
   task :start => :environment do
-    queue! %(cd #{deploy_to}/#{current_path} && #{puma_cmd} #{start_options})
+    queue! %[
+      if [ -e '#{pumactl_socket}' ]; then
+        echo 'Puma is already running!';
+      else
+        if [ -e '#{puma_config}' ]; then
+          cd #{deploy_to}/#{current_path} && #{puma_cmd} -q -d -e #{puma_env} -C #{puma_config}
+        else
+          cd #{deploy_to}/#{current_path} && #{puma_cmd} -q -d -e #{puma_env} -b 'unix://#{puma_socket}' -S #{puma_state} --control 'unix://#{pumactl_socket}'
+        fi
+      fi
+    ]
   end
 
   desc 'Stop puma'
   task stop: :environment do
-    queue! %(cd #{deploy_to}/#{current_path} && #{pumactl_cmd} -S #{puma_state} stop)
+    queue! %[
+      if [ -e '#{pumactl_socket}' ]; then
+        cd #{deploy_to}/#{current_path} && #{pumactl_cmd} -S #{puma_state} stop
+      else
+        echo 'Puma is not running!';
+      fi
+    ]
   end
 
   desc 'Restart puma'
   task restart: :environment do
-    if check_exists?(pumactl_socket)
-      queue! %(cd #{deploy_to}/#{current_path} && #{pumactl_cmd} -S #{puma_state} stop)
-      queue! %(cd #{deploy_to}/#{current_path} && #{puma_cmd} #{start_options})
-    else
-      queue! %(cd #{deploy_to}/#{current_path} && #{puma_cmd} #{start_options})
-    end
+    invoke :'puma:stop'
+    invoke :'puma:start'
   end
-
-  private
-
-    def start_options
-      if check_exists?(puma_config)
-        "-q -d -e #{puma_env} -C #{puma_config}"
-      else
-        "-q -d -e #{puma_env} -b 'unix://#{puma_socket}' -S #{puma_state} --control 'unix://#{pumactl_socket}'"
-      end
-    end
-
-    def check_exists?(file)
-      boolean = capture("if [ -e '#{file}' ]; then echo 'yes'; else echo 'no'; fi").chomp
-      boolean == 'yes' ? true : false
-    end
 end

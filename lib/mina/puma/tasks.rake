@@ -16,21 +16,21 @@ namespace :puma do
 
   desc 'Start puma'
   task :start => :environment do
-    queue! %(#{deploy_to}/#{current_path}/#{puma_cmd} #{start_options})
+    queue! %(cd #{deploy_to}/#{current_path} && #{puma_cmd} #{start_options})
   end
 
   desc 'Stop puma'
   task stop: :environment do
-    queue! %(#{deploy_to}/#{current_path}/#{pumactl_cmd} -S #{puma_state} stop)
+    queue! %(cd #{deploy_to}/#{current_path} && #{pumactl_cmd} -S #{puma_state} stop)
   end
 
   desc 'Restart puma'
   task restart: :environment do
     if check_exists?(pumactl_socket)
-      queue! %(#{deploy_to}/#{current_path}/#{pumactl_cmd} -S #{puma_state} stop)
-      queue! %(#{deploy_to}/#{current_path}/#{puma_cmd} #{start_options})
+      queue! %(cd #{deploy_to}/#{current_path} && #{pumactl_cmd} -S #{puma_state} stop)
+      queue! %(cd #{deploy_to}/#{current_path} && #{puma_cmd} #{start_options})
     else
-      queue! %(#{deploy_to}/#{current_path}/#{puma_cmd} #{start_options})
+      queue! %(cd #{deploy_to}/#{current_path} && #{puma_cmd} #{start_options})
     end
   end
 

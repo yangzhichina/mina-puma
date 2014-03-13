@@ -34,6 +34,7 @@ namespace :puma do
     queue! %[
       if [ -e '#{pumactl_socket}' ]; then
         cd #{deploy_to}/#{current_path} && #{pumactl_cmd} -S #{puma_state} stop
+        rm '#{pumactl_socket}'
       else
         echo 'Puma is not running!';
       fi

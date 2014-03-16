@@ -45,4 +45,15 @@ namespace :puma do
     invoke :'puma:stop'
     invoke :'puma:start'
   end
+
+  desc 'Restart puma (phased restart)'
+  task phased_restart: :environment do
+    queue! %[
+      if [ -e '#{pumactl_socket}' ]; then
+        cd #{deploy_to}/#{current_path} && #{pumactl_cmd} -S #{puma_state} phased-restart
+      else
+        echo 'Puma is not running!';
+      fi
+    ]
+  end
 end

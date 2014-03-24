@@ -5,6 +5,7 @@
 
 This gem provides several mina tasks:
 
+    mina puma:phased_restart  # Restart puma (with zero-downtime)
     mina puma:restart         # Restart puma
     mina puma:start           # Start puma
     mina puma:stop            # Stop puma
@@ -74,7 +75,7 @@ $ mina puma:start
 
         to :launch do
           ...
-          invoke :'puma:restart'
+          invoke :'puma:phased_restart'
         end
       end
     end

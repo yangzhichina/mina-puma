@@ -41,6 +41,12 @@ namespace :puma do
     ]
   end
 
+  desc 'Restart puma'
+  task restart: :environment do
+    invoke :'puma:stop'
+    invoke :'puma:start'
+  end
+
   desc 'Restart puma (phased restart)'
   task phased_restart: :environment do
     queue! %[

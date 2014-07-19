@@ -60,7 +60,7 @@ $ mina puma:start
       # Puma needs a place to store its pid file and socket file.
       queue! %(mkdir -p "#{deploy_to}/#{shared_path}/tmp/sockets")
       queue! %(chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/sockets")
-      queue! %(#{deploy_to}/#{shared_path}/tmp/pids")
+      queue! %(mkdir -p "#{deploy_to}/#{shared_path}/tmp/pids")
       queue! %(chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/pids")
 
       ...

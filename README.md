@@ -37,7 +37,7 @@ Make sure the following settings are set in your `config/deploy.rb`:
 Make sure the following directories exists on your server:
 
 * `shared/tmp/sockets` - directory for socket files.
-* `shared/tmp/pids` - direcotry for pid files.
+* `shared/tmp/pids` - directory for pid files.
 
 OR you can set other directories by setting follow variables:
 

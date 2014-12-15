@@ -23,6 +23,8 @@ And then execute:
 Or install it yourself as:
 
     $ gem install mina-puma
+    
+Note: by just including this gem, does not mean your development server will be Puma, for that, you need explicitly add `gem 'puma'` to your Gemfile.
 
 ## Usage
 

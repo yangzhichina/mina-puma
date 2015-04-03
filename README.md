@@ -69,6 +69,9 @@ $ mina puma:start
 
     end
 
+    # Add pids and sockets directories to shared paths
+    set :shared_paths, ['config/database.yml', 'tmp/pids', 'tmp/sockets']
+
     task :deploy do
       deploy do
         invoke :'git:clone'

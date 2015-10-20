@@ -55,35 +55,36 @@ $ mina puma:start
 ```
 
 ## Example
+```ruby
+require 'mina/puma'
 
-    require 'mina/puma'
+task :setup => :environment do
+  # Puma needs a place to store its pid file and socket file.
+  queue! %(mkdir -p "#{deploy_to}/#{shared_path}/tmp/sockets")
+  queue! %(chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/sockets")
+  queue! %(mkdir -p "#{deploy_to}/#{shared_path}/tmp/pids")
+  queue! %(chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/pids")
 
-    task :setup => :environment do
-      # Puma needs a place to store its pid file and socket file.
-      queue! %(mkdir -p "#{deploy_to}/#{shared_path}/tmp/sockets")
-      queue! %(chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/sockets")
-      queue! %(mkdir -p "#{deploy_to}/#{shared_path}/tmp/pids")
-      queue! %(chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/pids")
+  ...
 
+end
+
+# Add pids and sockets directories to shared paths
+set :shared_paths, ['config/database.yml', 'tmp/pids', 'tmp/sockets']
+
+task :deploy do
+  deploy do
+    invoke :'git:clone'
+    invoke :'deploy:link_shared_paths'
+    ...
+
+    to :launch do
       ...
-
+      invoke :'puma:phased_restart'
     end
-
-    # Add pids and sockets directories to shared paths
-    set :shared_paths, ['config/database.yml', 'tmp/pids', 'tmp/sockets']
-
-    task :deploy do
-      deploy do
-        invoke :'git:clone'
-        invoke :'deploy:link_shared_paths'
-        ...
-
-        to :launch do
-          ...
-          invoke :'puma:phased_restart'
-        end
-      end
-    end
+  end
+end
+```
 
 ## Contributing
 

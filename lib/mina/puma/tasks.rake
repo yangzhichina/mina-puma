@@ -45,6 +45,11 @@ namespace :puma do
     pumactl_command 'phased-restart'
   end
 
+  desc 'Restart puma (hard restart)'
+  task hard_restart: :environment do
+    invoke 'puma:stop'
+    invoke 'puma:start'
+  end
 
   def pumactl_command(command)
     queue! %[

@@ -50,6 +50,11 @@ namespace :puma do
     invoke 'puma:stop'
     invoke 'puma:start'
   end
+  
+  desc 'Get status of puma'
+  task status: :environment do
+    pumactl_command 'status'
+  end
 
   def pumactl_command(command)
     queue! %[

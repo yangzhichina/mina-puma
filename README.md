@@ -10,6 +10,7 @@ This gem provides several mina tasks:
     mina puma:restart         # Restart puma (using pumactl)
     mina puma:start           # Start puma
     mina puma:stop            # Stop puma
+    mina puma:status          # Get status
 
 ## Installation
 

@@ -16,6 +16,8 @@ namespace :puma do
 
   desc 'Start puma'
   task :start => :environment do
+    puma_port_option = "-p #{puma_port}" if puma_port
+
     queue! %[
       if [ -e '#{pumactl_socket}' ]; then
         echo 'Puma is already running!';
@@ -23,7 +25,7 @@ namespace :puma do
         if [ -e '#{puma_config}' ]; then
           cd #{deploy_to}/#{current_path} && #{puma_cmd} -q -d -e #{puma_env} -C #{puma_config}
         else
-          cd #{deploy_to}/#{current_path} && #{puma_cmd} -q -d -e #{puma_env} -b 'unix://#{puma_socket}' -S #{puma_state} --pidfile #{puma_pid} --control 'unix://#{pumactl_socket}'
+          cd #{deploy_to}/#{current_path} && #{puma_cmd} -q -d -e #{puma_env} -b 'unix://#{puma_socket}' #{puma_port_option} -S #{puma_state} --pidfile #{puma_pid} --control 'unix://#{pumactl_socket}'
         fi
       fi
     ]

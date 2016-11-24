@@ -13,6 +13,7 @@ namespace :puma do
   set_default :puma_cmd,       -> { "#{bundle_prefix} puma" }
   set_default :pumactl_cmd,    -> { "#{bundle_prefix} pumactl" }
   set_default :pumactl_socket, -> { "#{deploy_to}/#{shared_path}/tmp/sockets/pumactl.sock" }
+  set_default :puma_root_path, -> { "#{deploy_to}/#{current_path}" }
 
   desc 'Start puma'
   task :start => :environment do
@@ -23,9 +24,9 @@ namespace :puma do
         echo 'Puma is already running!';
       else
         if [ -e '#{puma_config}' ]; then
-          cd #{deploy_to}/#{current_path} && #{puma_cmd} -q -d -e #{puma_env} -C #{puma_config}
+          cd #{puma_root_path} && #{puma_cmd} -q -d -e #{puma_env} -C #{puma_config}
         else
-          cd #{deploy_to}/#{current_path} && #{puma_cmd} -q -d -e #{puma_env} -b 'unix://#{puma_socket}' #{puma_port_option} -S #{puma_state} --pidfile #{puma_pid} --control 'unix://#{pumactl_socket}'
+          cd #{puma_root_path} && #{puma_cmd} -q -d -e #{puma_env} -b 'unix://#{puma_socket}' #{puma_port_option} -S #{puma_state} --pidfile #{puma_pid} --control 'unix://#{pumactl_socket}'
         fi
       fi
     ]
@@ -52,7 +53,7 @@ namespace :puma do
     invoke 'puma:stop'
     invoke 'puma:start'
   end
-  
+
   desc 'Get status of puma'
   task status: :environment do
     pumactl_command 'status'
@@ -62,9 +63,9 @@ namespace :puma do
     queue! %[
       if [ -e '#{pumactl_socket}' ]; then
         if [ -e '#{puma_config}' ]; then
-          cd #{deploy_to}/#{current_path} && #{pumactl_cmd} -F #{puma_config} #{command}
+          cd #{puma_root_path} && #{pumactl_cmd} -F #{puma_config} #{command}
         else
-          cd #{deploy_to}/#{current_path} && #{pumactl_cmd} -S #{puma_state} -C 'unix://#{pumactl_socket}' --pidfile #{puma_pid} #{command}
+          cd #{puma_root_path} && #{pumactl_cmd} -S #{puma_state} -C 'unix://#{pumactl_socket}' --pidfile #{puma_pid} #{command}
         fi
       else
         echo 'Puma is not running!';

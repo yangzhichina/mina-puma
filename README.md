@@ -25,7 +25,7 @@ And then execute:
 Or install it yourself as:
 
     $ gem install mina-puma
-    
+
 Note: by just including this gem, does not mean your development server will be Puma, for that, you need explicitly add `gem 'puma'` to your Gemfile.
 
 ## Usage
@@ -49,6 +49,7 @@ OR you can set other directories by setting follow variables:
 * `puma_pid` - puma pid file, default `shared/tmp/pids/puma.pid`
 * `puma_state` - puma state file, default `shared/tmp/sockets/puma.state`
 * `pumactl_socket` - pumactl socket file, default `shared/tmp/sockets/pumactl.sock`
+* `puma_root_path` - puma command execute root path, default `current`
 
 Then:
 

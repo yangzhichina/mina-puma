@@ -61,19 +61,8 @@ $ mina puma:start
 ```ruby
 require 'mina/puma'
 
-task :setup => :environment do
-  # Puma needs a place to store its pid file and socket file.
-  command %(mkdir -p "#{deploy_to}/#{shared_path}/tmp/sockets")
-  command %(chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/sockets")
-  command %(mkdir -p "#{deploy_to}/#{shared_path}/tmp/pids")
-  command %(chmod g+rx,u+rwx "#{deploy_to}/#{shared_path}/tmp/pids")
-
-  ...
-
-end
-
-# Add pids and sockets directories to shared paths
-set :shared_paths, ['config/database.yml', 'tmp/pids', 'tmp/sockets']
+# Add pids and sockets directories to shared dirs
+set :shared_dirs, fetch(:shared_dirs, []).push('log', 'tmp/pids', 'tmp/sockets')
 
 task :deploy do
   deploy do
@@ -81,7 +70,7 @@ task :deploy do
     invoke :'deploy:link_shared_paths'
     ...
 
-    to :launch do
+    on :launch do
       ...
       invoke :'puma:phased_restart'
     end

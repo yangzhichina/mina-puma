@@ -21,13 +21,13 @@ namespace :puma do
 
     comment "Starting Puma..."
     command %[
-      if [ -e '#{fetch(:pumactl_socket)}' ]; then
+      if [ -e "#{fetch(:pumactl_socket)}" ]; then
         echo 'Puma is already running!';
       else
-        if [ -e '#{fetch(:puma_config)}' ]; then
+        if [ -e "#{fetch(:puma_config)}" ]; then
           cd #{fetch(:puma_root_path)} && #{fetch(:puma_cmd)} -q -d -e #{fetch(:puma_env)} -C #{fetch(:puma_config)}
         else
-          cd #{fetch(:puma_root_path)} && #{fetch(:puma_cmd)} -q -d -e #{fetch(:puma_env)} -b 'unix://#{fetch(:puma_socket)}' #{puma_port_option} -S #{fetch(:puma_state)} --pidfile #{fetch(:puma_pid)} --control 'unix://#{fetch(:pumactl_socket)}'
+          cd #{fetch(:puma_root_path)} && #{fetch(:puma_cmd)} -q -d -e #{fetch(:puma_env)} -b "unix://#{fetch(:puma_socket)}" #{puma_port_option} -S #{fetch(:puma_state)} --pidfile #{fetch(:puma_pid)} --control 'unix://#{fetch(:pumactl_socket)}'
         fi
       fi
     ]
@@ -67,11 +67,11 @@ namespace :puma do
 
   def pumactl_command(command)
     cmd =  %{
-      if [ -e '#{fetch(:pumactl_socket)}' ]; then
-        if [ -e '#{fetch(:puma_config)}' ]; then
+      if [ -e "#{fetch(:pumactl_socket)}" ]; then
+        if [ -e "#{fetch(:puma_config)}" ]; then
           cd #{fetch(:puma_root_path)} && #{fetch(:pumactl_cmd)} -F #{fetch(:puma_config)} #{command}
         else
-          cd #{fetch(:puma_root_path)} && #{fetch(:pumactl_cmd)} -S #{fetch(:puma_state)} -C 'unix://#{fetch(:pumactl_socket)}' --pidfile #{fetch(:puma_pid)} #{command}
+          cd #{fetch(:puma_root_path)} && #{fetch(:pumactl_cmd)} -S #{fetch(:puma_state)} -C "unix://#{fetch(:pumactl_socket)}" --pidfile #{fetch(:puma_pid)} #{command}
         fi
       else
         echo 'Puma is not running!';

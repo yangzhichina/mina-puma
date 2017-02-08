@@ -16,7 +16,7 @@ This gem provides several mina tasks:
 
 Add this line to your application's Gemfile:
 
-    gem 'mina-puma', :require => false
+    gem 'mina-puma', require: false
 
 And then execute:
 
